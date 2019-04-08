@@ -1,35 +1,38 @@
 
+$(function(){
+    //gegevenss van de aanvraag en verbinding met api gegevens
+    //verander deze als je het wilt gebruiken op een andere site of een andere locatie/onderwerp
 
-$flickr = new Flickr(FLICKR_KEY, FLICKR_SECRET);
-$data = $flickr->search('sun');
+    var opts = {
+        method: 'flickr.photos.search',                 //aangegeven methode van flickr om op foto te zoeken die te maken hebben met het onderwerp
+        api_key: '506f15058ab896701454d66a80768afc',    //flickr api key veradner als gebruik wordt voor andere website
+        sort: 'date-taken-desc',                        //methode van laten zien, date-taken-desc, relevance
+        text: 'spangen',                                //onderwerp van zoeken
+        extras: 'url_m',
+        per_page: 4,                                    //gewenste hoeveelheid foto's
+        format: 'json',                                 //ophalen in json formaat
+        nojsoncallback: 1
+    };
 
-//$urls = $flickr->getImageUrls("machoke");
-
-//echo "<pre>";
-//print_r($urls);
-//echo "</pre>";
-
-//foreach ($urls as $a){
-//    echo "<img src='$a'/><br/>";
-//}
-
-$json = file_get_contents("http://pokeapi.co/api/v1/pokedex/1/");
-$data = json_decode($json);
-$pokemons = $data->pokemon_entries;
-$random = rand(0, count($pokemons));
-
-$images = $flickr->getImageUrls($pokemons[$random]->pokemon_species->name);
-
-echo '<h1>' . $pokemons[$random]->pokemon_species->name . '</h1>';
-foreach($images as $imglink) {
-    echo '<img src="' . $imglink . '">';
-}
-
-
-//Create instance of class to use for communicating with Flickr webservice
-$flickr = new Flickr(FLICKR_KEY, FLICKR_SECRET);
-
-//Check to see if the server connects properly
-$connection = new mysqli(DB_HOST, DB_USER, DB_PASS, DB_NAME);
-
-//TODO: from here on it's up to you!
+    //volgende gedeelte haalt de api op met de voor gegeven onderdelen hier boven
+    //en plaatst ze in de goede volgorde
+    $.get('http://api.flickr.com/services/rest/', opts, function(resp){
+        var images;
+        if (resp.stat === "ok") {
+            images = $('<ul>', {'class': 'gallery'})
+            $.each(resp.photos.photo, function(index, value){
+                var image = $('<li>', {
+                    'class': 'gallery__item'
+                }).append($('<img>', {
+                    src: value.url_m,
+                    title: value.title,
+                    height: '100px',
+                })).appendTo(images);
+            });
+            images.appendTo('body');
+        }
+        else {
+            console.log('not ok', resp);
+        }
+    })
+})
