@@ -7,6 +7,7 @@ $(function(){
         method: 'flickr.photos.search',                 //aangegeven methode van flickr om op foto te zoeken die te maken hebben met het onderwerp
         api_key: '506f15058ab896701454d66a80768afc',    //flickr api key veradner als gebruik wordt voor andere website
         sort: 'date-taken-desc',                        //methode van laten zien, date-taken-desc, relevance
+        license: '4',                                   //licensie commerciel mogenlijk gebruik
         text: 'spangen',                                //onderwerp van zoeken
         extras: 'url_m',
         per_page: 4,                                    //gewenste hoeveelheid foto's
