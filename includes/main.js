@@ -18,11 +18,11 @@ function flickrapi(){
 
     //volgende gedeelte haalt de api op met de voor gegeven onderdelen hier boven
     //en plaatst ze in de goede volgorde
-    $.get('http://api.flickr.com/services/rest/', opts, function(resp){
+    $.get('https://api.flickr.com/services/rest/', opts, function(resp){
         
         var images;
         if (resp.stat === "ok") {
-            let picplace = document.getElementById('picplace');
+            let picplace = document.getElementById('picplace'); 
             picplace.innerHTML = '';
             images = $('<ul>', {'class': 'gallery'})
             $.each(resp.photos.photo, function(index, value){
@@ -43,8 +43,8 @@ function flickrapi(){
     })
 }
 
-
+//herhaalt de functie elke 30 seconden zodat de nieuwe foto's zigtbaar zijn
 flickrapi();
 
-    // setInterval(function(){
-    //     flickrapi()}, 30000)
+        setInterval(function(){
+            flickrapi()}, 30000)
